@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TradeWonk</title>
+    <link rel="stylesheet" href="/static/css/auth-style.css">
+    <script src="/static/js/signup.js" defer></script>
+</head>
+<body>
+
+    <div class="auth-container">
+        <a href="/" class="auth-logo">TradeWonk</a>
+
+        <h2>Create Your Account</h2>
+
+        <form id="signup-form" novalidate>
+
+            <div id="general-error" class="error-message" style="margin-bottom: 15px; text-align: center; font-weight: bold; display: none;"></div>
+
+            <div class="input-group">
+                <label for="fullname">Full Name / Username</label>
+                <input type="text" id="fullname" name="fullname" required minlength="3">
+                <span class="error-message" id="fullname-error"></span>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error-message" id="email-error"></span>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <span class="error-message" id="password-error"></span>
+
+                <ul id="password-feedback" class="password-criteria" style="display: none;">
+                    <li id="length-check">More than 8 characters</li>
+                    <li id="upper-check">Uppercase letter</li>
+                    <li id="lower-check">Lowercase letter</li>
+                    <li id="symbol-check">Symbol (e.g., !@#$)</li>
+                </ul>
+                </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                <span class="error-message" id="confirm-password-error"></span>
+            </div>
+
+            <div class="checkbox-group">
+                 <input type="checkbox" id="terms" name="terms" required>
+                 <label for="terms">I agree to the <a id="terms-link" href="/terms" target="_blank">Terms of Service</a> and <a id="privacy-link" href="/privacy" target="_blank">Privacy Policy</a>.</label>
+                 <span class="error-message" id="terms-error"></span>
+            </div>
+
+            <button type="submit" class="auth-button">Create Account</button>
+        </form>
+
+        <p class="switch-link">
+            Already have an account? <a href="/login">Login</a>
+        </p>
+    </div>
+
+    </body>
+</html>

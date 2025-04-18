@@ -1,0 +1,288 @@
+/* auth-style.css - Styles for Login and Sign Up pages - MORE SPACIOUS */
+
+/* Basic Reset & Body */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #212529;
+    /* Centering container vertically and horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    /* Subtle gradient background */
+    background: linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 100%); /* Slightly adjusted gradient */
+    padding: 25px; /* Increased padding for smaller screens */
+}
+
+/* Authentication Container */
+.auth-container {
+    background-color: #ffffff;
+    padding: 50px 55px; /* Increased internal padding */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Softer, slightly larger shadow */
+    width: 100%;
+    max-width: 450px; /* Slightly wider max width */
+    text-align: center;
+    border: 1px solid #e9ecef; /* Subtle border */
+}
+
+/* Logo */
+.auth-logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3A7DFF;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 30px; /* Increased space below logo */
+}
+
+/* Heading */
+.auth-container h2 {
+    font-size: 1.9rem; /* Slightly larger heading */
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 35px; /* Increased space below heading */
+    text-align: center;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 28px; /* Increased space between input fields */
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 500;
+    color: #4B5563;
+    margin-bottom: 10px; /* Increased space between label and input */
+    font-size: 0.95rem; /* Slightly larger label */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 16px; /* Increased input padding */
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #212529;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fdfdff; /* Slightly off-white input background */
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3A7DFF;
+    box-shadow: 0 0 0 3px rgba(58, 125, 255, 0.2);
+    background-color: #ffffff; /* White on focus */
+}
+
+/* Form Options (Forgot Password - keep if used on login page) */
+.form-options {
+    text-align: right;
+    margin-bottom: 30px; /* Increased space */
+    margin-top: -15px; /* Adjust slightly */
+}
+
+.form-options a {
+    font-size: 0.9rem; /* Slightly larger */
+    color: #6C757D;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.form-options a:hover {
+    color: #3A7DFF;
+}
+
+/* Checkbox (for Terms on Sign Up) */
+.checkbox-group {
+     margin-bottom: 30px; /* Increased space below checkbox */
+     text-align: left;
+     /* display: flex; - Using block layout for label/error below checkbox */
+     /* align-items: flex-start; */
+     /* gap: 10px; */
+}
+ .checkbox-group input[type="checkbox"] {
+     width: auto; /* Don't force checkbox full width */
+     accent-color: #3A7DFF;
+     margin-right: 8px; /* Space between checkbox and label */
+     /* vertical-align: middle; */ /* Adjust alignment if needed */
+     transform: translateY(1px); /* Fine-tune vertical alignment */
+}
+ .checkbox-group label {
+     display: inline; /* Keep label inline with checkbox */
+     margin-bottom: 0;
+     font-size: 0.9rem; /* Consistent size */
+     color: #6C757D;
+     line-height: 1.5; /* Improve readability if label wraps */
+     vertical-align: middle;
+}
+ .checkbox-group label a {
+     color: #3A7DFF;
+     text-decoration: underline; /* Make links obvious */
+}
+ .checkbox-group label a:hover {
+     color: #2A6DE6;
+}
+/* Error message specific to checkbox group */
+.checkbox-group .error-message {
+    display: block; /* Ensure error shows on its own line */
+    margin-left: 25px; /* Indent error under checkbox label */
+    margin-top: 4px;
+}
+
+
+/* Submit Button */
+.auth-button {
+    width: 100%;
+    padding: 15px 20px; /* Slightly more vertical padding */
+    font-size: 1.05rem; /* Slightly larger button text */
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(to right, #3A7DFF, #2A6DE6);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(58, 125, 255, 0.25); /* Slightly adjusted shadow */
+    margin-top: 5px; /* Ensure some space above button if elements before it were removed */
+}
+
+.auth-button:disabled { /* Style for when button is disabled during fetch */
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-button:hover:not(:disabled) { /* Prevent hover effect when disabled */
+    background: linear-gradient(to right, #2A6DE6, #1E5BC4);
+    box-shadow: 0 5px 10px rgba(58, 125, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* Switch Link (Login <-> Sign Up) */
+.switch-link {
+    text-align: center;
+    margin-top: 30px; /* Increased space above switch link */
+    font-size: 0.95rem; /* Slightly larger */
+    color: #4B5563;
+}
+
+.switch-link a {
+    color: #3A7DFF;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.switch-link a:hover {
+    text-decoration: underline;
+}
+
+/* Error Messages (General) */
+.error-message {
+    color: #e74c3c; /* Slightly different red */
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: 6px; /* Space below input field or element */
+    display: none; /* Hidden by default, JS makes it visible */
+    font-weight: 500;
+    width: 100%; /* Ensure it takes full width in its container */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 40px 30px; /* Adjust padding */
+        max-width: 95%; /* Allow slightly more width relative to screen */
+    }
+
+    .auth-container h2 {
+        font-size: 1.7rem; /* Adjust heading */
+    }
+
+    .input-group input {
+        padding: 12px 14px; /* Adjust input padding */
+    }
+
+    .auth-button {
+        padding: 14px 18px; /* Adjust button padding */
+        font-size: 1rem;
+    }
+
+    .checkbox-group label {
+        font-size: 0.85rem;
+    }
+}
+
+
+/* --- START: Added Styles for Input Errors and Password Feedback --- */
+
+/* Style for input fields with errors */
+.input-error {
+    border-color: #e74c3c !important; /* Use the same red as error messages */
+    /* You could add a subtle background color too if desired */
+    /* background-color: #fdeded; */
+}
+
+/* Style for terms checkbox group when there's an error */
+.checkbox-group.input-error > label { /* Target the label directly within the error group */
+     color: #e74c3c !important; /* Highlight terms label text */
+}
+/* Optional: Style the checkbox itself */
+.checkbox-group.input-error input[type="checkbox"] {
+    outline: 1px solid #e74c3c;
+}
+
+
+/* Password feedback list styling */
+.password-criteria {
+    list-style: none; /* Remove default bullet points */
+    padding-left: 5px; /* Optional slight indent */
+    margin-top: 8px; /* Space above the list */
+    font-size: 0.85rem; /* Match error message size */
+}
+
+.password-criteria li {
+    margin-bottom: 4px; /* Space between criteria */
+    color: #6C757D; /* Default text color (like secondary labels) */
+    transition: color 0.2s ease-in-out; /* Smooth color transition */
+    text-indent: -1.1em; /* Indent text to align after icon */
+    padding-left: 1.1em; /* Counteract text-indent */
+}
+
+/* Style for criteria that are MET (valid) */
+.password-criteria li.valid {
+    color: #28a745; /* Green color for success */
+}
+.password-criteria li.valid::before {
+     content: '✓ '; /* Checkmark symbol */
+     color: #28a745; /* Green color */
+     font-weight: bold;
+     /* display: inline-block; */ /* Handled by text-indent/padding */
+     /* width: 1em; */
+}
+
+/* Style for criteria that are NOT MET (invalid) */
+.password-criteria li.invalid {
+    color: #e74c3c; /* Red color for failure */
+}
+.password-criteria li.invalid::before {
+     content: '✗ '; /* Cross symbol */
+     color: #e74c3c; /* Red color */
+     font-weight: bold;
+     /* display: inline-block; */ /* Handled by text-indent/padding */
+     /* width: 1em; */
+}
+/* --- END: Added Styles --- */
