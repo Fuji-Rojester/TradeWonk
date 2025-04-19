@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TradeWonk</title>
+    <link rel="stylesheet" href="/static/css/dashboard-style.css"> </head>
+<body>
+    <header class="dashboard-header">
+        <nav>
+            <span class="logo">TradeWonk</span>
+            <div>
+                <span>Welcome, {{ username }}!</span>
+                <form action="{{ url_for('auth.logout') }}" method="POST" style="display: inline;">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h1>Dashboard Overview</h1>
+
+        <section class="kpi-section">
+            <div class="kpi-card">
+                <h4>Total Portfolio Value</h4>
+                <div id="total-value" class="kpi-value">[Loading...]</div>
+            </div>
+            <div class="kpi-card">
+                <h4>Day's Change</h4>
+                <div id="day-change" class="kpi-value">[Loading...]</div>
+                <div id="day-change-percent" class="kpi-percent">[Loading...]</div>
+            </div>
+            <div class="kpi-card">
+                <h4>Overall P/L</h4>
+                <div id="overall-pl" class="kpi-value">[Loading...]</div>
+                <div id="overall-pl-percent" class="kpi-percent">[Loading...]</div>
+            </div>
+            <div class="kpi-card">
+                <h4>Available Cash</h4>
+                <div id="cash-balance" class="kpi-value">[Loading...]</div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="charts-section">
+            <div class="chart-card">
+                <h3>Portfolio Allocation</h3>
+                <div class="chart-container">
+                     <canvas id="allocationChart">[Allocation Chart Area]</canvas>
+                     </div>
+            </div>
+            <div class="chart-card">
+                <h3>Portfolio Performance (YTD)</h3>
+                 <div class="chart-container">
+                     <canvas id="performanceChart">[Performance Chart Area]</canvas>
+                    </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="holdings-snapshot-section">
+             <div class="holdings-card">
+                 <h3>Largest Holdings</h3>
+                 <ul id="largest-holdings-list">[Loading...]</ul>
+                 <a href="/holdings">View All Holdings</a> </div>
+             <div class="holdings-card">
+                <h3>Today's Movers</h3>
+                <ul id="top-movers-list">[Loading...]</ul>
+             </div>
+        </section>
+
+        </main>
+
+    <footer>
+        </footer>
+
+    <script src="/static/js/dashboard.js" defer></script>
+</body>
+</html>

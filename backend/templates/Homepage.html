@@ -23,14 +23,15 @@
         <nav class="navbar container">
             <a href="#" class="logo" data-aos="fade-down" data-aos-delay="100">TradeWonk</a>
             <div class="nav-controls">
-                 <ul class="nav-links">
+                <ul class="nav-links">
                     <li><a href="#features">Features</a></li>
                     <li><a href="#use-cases">Use Cases</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#faq">FAQ</a></li>
-                    <li><a href="login.html" class="btn btn-outline">Login</a></li>
-                    <li><a href="signup.html" class="btn btn-primary">Sign Up for free</a></li>
-                </ul>
+                    <!-- Corrected links using Flask's url_for -->
+                    <li><a href="{{ url_for('views.login_page') }}" class="btn btn-outline">Login</a></li>
+                    <li><a href="{{ url_for('views.signup_page') }}" class="btn btn-primary">Sign Up for free</a></li>
+                </ul>                
                 <button id="dark-mode-toggle" class="dark-mode-button" aria-label="Toggle dark mode">
                     <i class="fas fa-moon"></i> </button>
                  <button class="mobile-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">

@@ -1,25 +1,28 @@
+from __future__ import annotations  # Ensures forward references work smoothly
+
 from .. import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin # Import UserMixin
+from flask_login import UserMixin
 from datetime import datetime, timezone
+from typing import List, Optional
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# Inherit from UserMixin *and* db.Model
 class User(UserMixin, db.Model):
-    """
-    Represents a user in the application.
-    Stores authentication details and links to user-specific data.
-    Includes UserMixin for Flask-Login integration.
-    """
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
-    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    # Use Mapped and mapped_column for primary key
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Use Mapped and mapped_column for other columns, specifying type hints
+    username: Mapped[str] = mapped_column(db.String(64), index=True, unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(db.String(120), index=True, unique=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(db.String(256), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc), nullable=False)
+    email_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
+    last_login_at: Mapped[datetime | None] = mapped_column(nullable=True)
 
-    # --- Relationships (Add later) ---
-    #portfolios = db.relationship('Portfolio', backref='owner', lazy='dynamic', cascade='all, delete-orphan')
+    # --- Relationships ---
+    # Use Mapped for relationship type hint
+    portfolios: Mapped[List["Portfolio"]] = relationship("Portfolio", back_populates="user", lazy="dynamic", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<User id={self.id} username={self.username} email={self.email}>'
@@ -32,5 +35,14 @@ class User(UserMixin, db.Model):
             return False
         return check_password_hash(self.password_hash, password)
 
-    # Flask-Login uses the 'id' field provided by UserMixin by default,
-    # which points to our primary key 'id'. No extra methods needed here.
+    def to_dict(self, include_email=True):
+        user_data = {
+            "id": self.id,
+            "username": self.username,
+            "created_at": self.created_at.isoformat() + 'Z' if self.created_at else None,
+            "email_verified": self.email_verified,
+            "last_login_at": self.last_login_at.isoformat() + 'Z' if self.last_login_at else None
+        }
+        if include_email:
+            user_data["email"] = self.email
+        return user_data

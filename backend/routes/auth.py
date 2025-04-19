@@ -1,11 +1,10 @@
 # backend/routes/auth.py
-
-# Import the 're' module for regular expressions at the top
 import re
 from flask import Blueprint, jsonify, request
 from .. import db
 from ..models.user import User
 from flask_login import login_user, logout_user, login_required, current_user
+from datetime import datetime, timezone # Ensure timezone is imported
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -23,17 +22,11 @@ def is_strong_password(password):
     has_symbol = any(not c.isalnum() for c in password)
     return has_upper and has_lower and has_symbol
 
-# --- NEW Email Format Validation Helper ---
 def is_valid_email_format(email):
     if not email:
         return False
-    # Basic regex for something@something.something structure
-    # Allows letters, numbers, ., _, %, +, - before @
-    # Allows letters, numbers, ., - after @
-    # Requires a dot . and at least two letters for the domain ending (e.g., .com, .io)
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
-# --- END NEW Helper ---
 
 # ---------------------------
 # 🔐 Registration Route
@@ -44,44 +37,35 @@ def register():
     if not data:
         return jsonify({'error': 'Missing JSON data'}), 400
 
+    # Normalize before validation/checks
     username = data.get('username', '').strip()
-    email = data.get('email', '').strip()
+    email = data.get('email', '').strip().lower() # Lowercase email immediately
     password = data.get('password', '')
 
-    # Validation
     if not all([username, email, password]):
         return jsonify({'error': 'Missing required fields'}), 400
     if not is_valid_username(username):
         return jsonify({'error': 'Username must be at least 3 characters'}), 400
-
-    # --- Use the new email format check ---
     if not is_valid_email_format(email):
          return jsonify({'error': 'Invalid email format'}), 400
-    # --- End email format check ---
-
     if not is_strong_password(password):
         return jsonify({
             'error': 'Password must be at least 9 characters, with uppercase, lowercase, and a symbol'
         }), 400
 
-    # Check uniqueness
+    # Use normalized values for checks
     if User.query.filter_by(username=username).first():
         return jsonify({'error': 'Username already taken'}), 409
     if User.query.filter_by(email=email).first():
         return jsonify({'error': 'Email already registered'}), 409
 
-    # Create user
+    # Use normalized values for creation
     new_user = User(username=username, email=email)
-    new_user.set_password(password)
+    new_user.set_password(password) # Hashes the password
     db.session.add(new_user)
     db.session.commit()
 
-    # Optional auto-login
-    # login_user(new_user)
-
     return jsonify({'message': 'User registered successfully'}), 201
-
-# --- (rest of your code: /login, /logout, /status, /check-username remains the same) ---
 
 # ---------------------------
 # ✅ Login Route
@@ -92,28 +76,43 @@ def login():
     if not data:
         return jsonify({'error': 'Missing JSON data'}), 400
 
+    # Get identifier (could be email or username) and password
     email_or_username = data.get('email') or data.get('username')
     password = data.get('password')
-    remember = data.get('remember', False) # Default remember to False
+    remember = data.get('remember', False) # Get remember status
 
     if not email_or_username or not password:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    user = User.query.filter(
-        (User.email == email_or_username) | (User.username == email_or_username)
-    ).first()
+    # Prepare identifier for query (lowercase if it's an email)
+    login_identifier = email_or_username.strip()
+    is_email = '@' in login_identifier
+    if is_email:
+        login_identifier_for_query = login_identifier.lower()
+    else:
+        login_identifier_for_query = login_identifier
+
+    # Find user by email (case-insensitive) or username (case-sensitive, adjust if needed)
+    if is_email:
+        user = User.query.filter(User.email == login_identifier_for_query).first()
+    else:
+        user = User.query.filter(User.username == login_identifier_for_query).first()
+
 
     if user and user.check_password(password):
-        login_user(user, remember=remember)
+        login_user(user, remember=remember) # Pass remember status
+
+        # Track last login time
+        user.last_login_at = datetime.now(timezone.utc)
+        db.session.commit()
+
+        # Return user data using the model's method
         return jsonify({
             'message': 'Login successful',
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email
-            }
+            'user': user.to_dict()
         }), 200
 
+    # If authentication failed
     return jsonify({'error': 'Invalid credentials'}), 401
 
 # ---------------------------
@@ -131,13 +130,8 @@ def logout():
 @auth_bp.route('/status')
 @login_required
 def status():
-    return jsonify({
-        'user': {
-            'id': current_user.id,
-            'username': current_user.username,
-            'email': current_user.email
-        }
-    }), 200
+    # Return current user data using the model's method
+    return jsonify({'user': current_user.to_dict()}), 200
 
 # ---------------------------
 # 🔍 Check Username Availability
@@ -151,9 +145,9 @@ def check_username():
     username = data['username'].strip()
 
     if not is_valid_username(username):
-        # You might return an error instead if the username is too short based on policy
-        return jsonify({"exists": False, "message": "Username format invalid (too short)"}), 200 # Or 400?
+        # Consistent error format might be better
+        return jsonify({"error": "Username format invalid (too short)"}), 400
 
     user = User.query.filter_by(username=username).first()
-
+    # Return boolean directly in the expected format
     return jsonify({"exists": bool(user)}), 200
